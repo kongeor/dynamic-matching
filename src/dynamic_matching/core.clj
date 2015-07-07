@@ -1,18 +1,15 @@
 (ns dynamic-matching.core
-  (:require [clojure.core.match :refer [match]]))
+  (:require [clojure.core.match :refer [match]]
+            [clojure.edn :as edn]))
 
-(defmacro with-match []
+(defmacro with-match [data]
   `(fn [x# y#]
      (match [x# y#]
-       [true true ] 1
-       [true false] 2
-       [~'_    ~'_    ] 3)))
+       ~@(for [d data]
+           `~d))))
 
-(macroexpand-1 '(with-match))
+#_(let [data (edn/read-string (slurp "matching_config.edn"))]
+  (macroexpand-1 '(with-match [[true true] 1 [true false] 2])))
 
-((with-match) true true)
-
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+#_(let [data (edn/read-string (slurp "matching_config.edn"))]
+  ((with-match data) true true))
