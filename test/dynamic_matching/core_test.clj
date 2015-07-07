@@ -2,6 +2,11 @@
   (:require [clojure.test :refer :all]
             [dynamic-matching.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest with-match-test
+  (testing "with-match"
+    (is (= 1
+           ((with-match) true true)))
+    (is (= 2
+           ((with-match) true false)))
+    (is (= 3
+           ((with-match) false true)))))
